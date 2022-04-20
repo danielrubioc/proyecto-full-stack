@@ -1,39 +1,50 @@
 require("dotenv").config();
 const { query } = require("./db");
 
-const menusIndexDB = async () => {
+const menusIndexDB = async (user_id) => {
     const sqlquery = {
-        text: "SELECT * FROM menus ORDER BY id",
+        text: "SELECT * FROM menus WHERE user_id = $1 ORDER BY id",
+        values: [user_id],
     };
     const response = query(sqlquery);
     return response;
 };
 
 const menusCreateDB = async (data) => {
-    const { name, email, password } = data;
+    const { name, url, user_id } = data;
     const sqlquery = {
-        text: "INSERT INTO menus (name, email, password) VALUES ($1,$2,$3) RETURNING *",
-        values: [name, email, password],
+        text: "INSERT INTO menus (name, url, user_id) VALUES ($1,$2,$3) RETURNING *",
+        values: [name, url, user_id],
     };
     const response = query(sqlquery);
     return response;
 };
 
-const menusDeleteDB = async (id) => {
+const menusDeleteDB = async (data) => {
+    const { id, user_id } = data;
     const sqlquery = {
-        text: "DELETE FROM menus WHERE id=$1 RETURNING*;",
-        values: [id],
+        text: "DELETE FROM menus WHERE id=$1 AND user_id=$2 RETURNING*;",
+        values: [id, user_id],
     };
     const response = query(sqlquery);
     return response;
 };
 
 const menusUpdateDB = async (data) => {
-    const { name, password, id } = data;
-    console.log({ name, password, id });
+    const { id, name, url, user_id } = data;
     const sqlquery = {
-        text: "UPDATE menus SET name = $1, password = $2 WHERE id = $3 RETURNING*;",
-        values: [name, password, id],
+        text: "UPDATE menus SET name = $1, url = $2 WHERE id = $3 AND user_id=$4 RETURNING*;",
+        values: [name, url, user_id, id],
+    };
+    const response = query(sqlquery);
+    return response;
+};
+
+const menusUserExistDB = async (data) => {
+    const { user_id, menu_id } = data;
+    const sqlquery = {
+        text: "SELECT * FROM menus WHERE user_id = $1 AND id = $2;",
+        values: [user_id, menu_id],
     };
     const response = query(sqlquery);
     return response;
@@ -44,4 +55,5 @@ module.exports = {
     menusCreateDB,
     menusDeleteDB,
     menusUpdateDB,
+    menusUserExistDB,
 };

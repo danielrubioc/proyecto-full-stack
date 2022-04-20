@@ -5,7 +5,6 @@ const {
     usersUpdateDB,
 } = require("../database/users.db");
 const bcrypt = require("bcryptjs");
-const path = require("path");
 
 const usersIndex = async (req, res) => {
     const response = await usersIndexDB();

@@ -4,51 +4,45 @@ const {
     menusDeleteDB,
     menusUpdateDB,
 } = require("../database/menus.db");
-const bcrypt = require("bcryptjs");
-const path = require("path");
 
 const menusIndex = async (req, res) => {
-    const response = await menusIndexDB();
+    const user_id = req.userID;
+    const response = await menusIndexDB(user_id);
     if (!response.ok) {
-        return res.status(500).json({ msg: response.msg });
+        return res.status(500).json({ ok: false, msg: response.msg });
     }
-    return res.json({ datas: response.datas });
+    return res.json({ ok: true, data: response.datas });
 };
 
 const menusCreate = async (req, res) => {
-    const { name, email, password } = req.body;
-    const salt = await bcrypt.genSalt(10);
-    const hashPassword = await bcrypt.hash(password, salt);
-    const response = await menusCreateDB({
-        name,
-        email,
-        password: hashPassword,
-    });
+    const { name, url } = req.body;
+    const user_id = req.userID;
+    const response = await menusCreateDB({ name, url, user_id });
     if (!response.ok) {
-        return res.status(500).json({ msg: response.msg });
+        return res.status(500).json({ ok: false, msg: response.msg });
     }
-    return res.json({ datas: response.datas });
+    return res.json({ ok: true, data: response.datas });
 };
 
 const menusDelete = async (req, res) => {
     const { id } = req.params;
-    const response = await menusDeleteDB(id);
+    const user_id = req.userID;
+    const response = await menusDeleteDB({ id, user_id });
     if (!response.ok) {
-        return res.status(500).json({ msg: response.msg });
+        return res.status(500).json({ ok: false, msg: response.msg });
     }
-    return res.json({ datas: response.datas });
+    return res.json({ ok: true, data: response.datas });
 };
 
 const menusUpdate = async (req, res) => {
     const { id } = req.params;
-    const { name, password } = req.body;
-    const salt = await bcrypt.genSalt(10);
-    const hashPassword = await bcrypt.hash(password, salt);
-    const response = await menusUpdateDB({ id, name, password: hashPassword });
+    const { name, url } = req.body;
+    const user_id = req.userID;
+    const response = await menusUpdateDB({ id, name, url, user_id });
     if (!response.ok) {
-        return res.status(500).json({ msg: response.msg });
+        return res.status(500).json({ ok: false, msg: response.msg });
     }
-    return res.json({ datas: response.datas });
+    return res.json({ ok: true, data: response.datas });
 };
 
 module.exports = {
