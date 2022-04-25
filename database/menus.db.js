@@ -3,7 +3,7 @@ const { query } = require("./db");
 
 const menusIndexDB = async (user_id) => {
     const sqlquery = {
-        text: "SELECT * FROM menus WHERE user_id = $1 ORDER BY id",
+        text: "SELECT * FROM menus WHERE user_id = $1 ORDER BY id DESC",
         values: [user_id],
     };
     const response = query(sqlquery);
@@ -34,9 +34,9 @@ const menusUpdateDB = async (data) => {
     const { id, name, url, user_id } = data;
     const sqlquery = {
         text: "UPDATE menus SET name = $1, url = $2 WHERE id = $3 AND user_id=$4 RETURNING*;",
-        values: [name, url, user_id, id],
+        values: [name, url, id, user_id],
     };
-    const response = query(sqlquery);
+    const response = await query(sqlquery);
     return response;
 };
 
@@ -50,10 +50,20 @@ const menusUserExistDB = async (data) => {
     return response;
 };
 
+const menuByIdDB = async (id) => {
+    const sqlquery = {
+        text: "SELECT * FROM menus WHERE id = $1;",
+        values: [id],
+    };
+    const response = query(sqlquery);
+    return response;
+};
+
 module.exports = {
     menusIndexDB,
     menusCreateDB,
     menusDeleteDB,
     menusUpdateDB,
     menusUserExistDB,
+    menuByIdDB,
 };

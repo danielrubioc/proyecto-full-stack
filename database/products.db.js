@@ -1,12 +1,10 @@
 require("dotenv").config();
 const { query } = require("./db");
 
-const productsIndexDB = async (data) => {
-    const { menu_id, user_id } = data;
-    console.log({ user_id, menu_id });
+const productsIndexDB = async (category_id) => {
     const sqlquery = {
         text: "SELECT * FROM products WHERE category_id = $1 ORDER BY id",
-        values: [menu_id],
+        values: [category_id],
     };
     const response = query(sqlquery);
     return response;

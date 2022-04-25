@@ -17,6 +17,7 @@ const {
     menusCreate,
     menusUpdate,
     menusDelete,
+    menuById,
 } = require("../controllers/menus.controller");
 const {
     categoriesIndex,
@@ -43,6 +44,7 @@ router.post("/login", login);
 router.post("/register", [validateRegister, existsErrors], register);
 
 /*USERS ROUTES*/
+
 router.get("/users", requireAuth, usersIndex);
 router.post("/users", usersCreate);
 router.put("/users/:id", usersUpdate);
@@ -50,9 +52,10 @@ router.delete("/users/:id", usersDelete);
 
 /*MENUS ROUTES*/
 router.get("/menus", requireAuth, menusIndex);
+router.get("/menus/:menu_id", requireAuth, menuById);
 router.post("/menus", requireAuth, menusCreate);
-router.put("/menus/:menus_id", [requireAuth, menuByUser], menusUpdate);
-router.delete("/menus/:menus_id", [requireAuth, menuByUser], menusDelete);
+router.put("/menus/:menu_id", [requireAuth, menuByUser], menusUpdate);
+router.delete("/menus/:menu_id", [requireAuth, menuByUser], menusDelete);
 
 /*CATEGORIES ROUTES*/
 router.get(

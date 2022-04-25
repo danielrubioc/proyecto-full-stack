@@ -18,7 +18,8 @@ const login = async (req, res) => {
         // generar JWT
         const payload = { id: user.id };
         const token = jwt.sign(payload, process.env.JWT_SECRET, {
-            expiresIn: "1h",
+            //expiresIn: "1h", expiresIn: "20s",
+            expiresIn: process.env.JWT_TTL,
         });
 
         if (!response.ok) {

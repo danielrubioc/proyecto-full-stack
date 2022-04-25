@@ -4,7 +4,7 @@ const { query } = require("./db");
 const categoriesIndexDB = async (data) => {
     const { user_id, menu_id } = data;
     const sqlquery = {
-        text: "SELECT c.id,c.name,c.description, c.menu_id FROM categories as c JOIN menus as m ON c.menu_id = m.id WHERE m.user_id = $1 AND c.menu_id = $2 ORDER BY id",
+        text: "SELECT c.id,c.name,c.description, c.menu_id, c.create_at, (SELECT COUNT(*) AS count_product FROM products where category_id=c.id) FROM categories as c JOIN menus as m ON c.menu_id = m.id WHERE m.user_id = $1 AND c.menu_id = $2 ORDER BY id",
         values: [user_id, menu_id],
     };
     const response = query(sqlquery);
@@ -32,7 +32,6 @@ const categoriesDeleteDB = async (id) => {
 
 const categoriesUpdateDB = async (data) => {
     const { category_id, name, description } = data;
-    console.log({ category_id, name, description });
     const sqlquery = {
         text: "UPDATE categories SET name = $1, description = $2 WHERE id = $3 RETURNING*;",
         values: [name, description, category_id],

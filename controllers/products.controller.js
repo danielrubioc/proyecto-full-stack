@@ -10,9 +10,8 @@ const {
 } = require("../database/products.db");
 
 const productsIndex = async (req, res) => {
-    const user_id = req.userID;
-    const { menu_id } = req.params;
-    const response = await productsIndexDB({ user_id, menu_id });
+    const { category_id } = req.params;
+    const response = await productsIndexDB(category_id);
     if (!response.ok) {
         return res.status(500).json({ ok: false, msg: response.msg });
     }
@@ -51,6 +50,7 @@ const productsCreate = async (req, res) => {
 const productsDelete = async (req, res) => {
     const { product_id } = req.params;
     const { datas } = await productGetDB(product_id);
+
     if (datas.lenght > 0) {
         const imageBD = datas[0].image;
         fs.unlink(
@@ -71,12 +71,12 @@ const productsUpdate = async (req, res) => {
     const { product_id, category_id } = req.params;
     const { name, description, normal_price, discount_price, visible } =
         req.body;
-    const { image } = req.files;
+    const { image } = req.files ? req.files : { image: null };
     let path_image = "";
     const { datas } = await productGetDB(product_id);
-    const imageBD = datas.lenght > 0 ? datas[0].image : "";
+    const imageBD = datas.length > 0 ? datas[0].image : "";
 
-    if (image) {
+    if (image !== null) {
         const pathFoto = `${nanoid()}.${image.mimetype.split("/")[1]}`;
         path_image = pathFoto;
 

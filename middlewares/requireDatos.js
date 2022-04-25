@@ -90,7 +90,7 @@ const validateRegister = [
     check("foto")
         .custom((value, { req }) => {
             const { foto } = req.files;
-            console.log(req.files);
+            //console.log(req.files);
             const mimeTypes = ["image/jpeg", "image/png"];
             if (!mimeTypes.includes(foto.mimetype)) {
                 return false;

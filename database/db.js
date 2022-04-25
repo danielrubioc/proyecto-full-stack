@@ -3,7 +3,7 @@ const { Pool } = require("pg");
 
 const connectionString =
     process.env.DATABASE_URL ||
-    "postgresql://postgres:root@localhost:5432/menu_digital";
+    "postgresql://postgres:root@localhost:5432/menu2";
 
 const pool = process.env.DATABASE_URL
     ? new Pool({
