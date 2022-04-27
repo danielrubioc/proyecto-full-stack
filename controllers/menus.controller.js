@@ -4,6 +4,7 @@ const {
     menusDeleteDB,
     menusUpdateDB,
     menuByIdDB,
+    menuAll,
 } = require("../database/menus.db");
 
 const menusIndex = async (req, res) => {
@@ -59,10 +60,21 @@ const menuById = async (req, res) => {
     return res.json({ ok: true, data: response.datas });
 };
 
+const menusDigital = async (req, res) => {
+    const { menu_id: id } = req.params;
+    const response = await menuAll(id);
+    console.log(response);
+    if (!response.ok) {
+        return res.status(500).json({ ok: false, msg: response.msg });
+    }
+    return res.json({ ok: true, data: response.datas });
+};
+
 module.exports = {
     menusIndex,
     menusCreate,
     menusDelete,
     menusUpdate,
     menuById,
+    menusDigital,
 };

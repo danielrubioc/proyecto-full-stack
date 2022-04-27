@@ -18,6 +18,7 @@ const {
     menusUpdate,
     menusDelete,
     menuById,
+    menusDigital,
 } = require("../controllers/menus.controller");
 const {
     categoriesIndex,
@@ -56,6 +57,7 @@ router.get("/menus/:menu_id", requireAuth, menuById);
 router.post("/menus", requireAuth, menusCreate);
 router.put("/menus/:menu_id", [requireAuth, menuByUser], menusUpdate);
 router.delete("/menus/:menu_id", [requireAuth, menuByUser], menusDelete);
+router.get("/menus/:menu_id/menu-digital", requireAuth, menusDigital);
 
 /*CATEGORIES ROUTES*/
 router.get(

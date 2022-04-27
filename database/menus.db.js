@@ -59,6 +59,22 @@ const menuByIdDB = async (id) => {
     return response;
 };
 
+const menuAll = async (id) => {
+    const sqlquery = {
+        text: `SELECT c.id as category_id, c.name as category_name, p.id , p.name, p.normal_price, p.discount_price, p.description, p.image  
+        FROM menus as m 
+        JOIN categories as c ON c.menu_id = m.id
+        INNER JOIN products as p ON c.id = p.category_id
+        WHERE m.id = $1
+        AND p.visible = true
+        GROUP BY c.id, p.id
+        ORDER BY c.name ASC;`,
+        values: [id],
+    };
+    const response = query(sqlquery);
+    return response;
+};
+
 module.exports = {
     menusIndexDB,
     menusCreateDB,
@@ -66,4 +82,5 @@ module.exports = {
     menusUpdateDB,
     menusUserExistDB,
     menuByIdDB,
+    menuAll,
 };
