@@ -61,13 +61,13 @@ const menuByIdDB = async (id) => {
 
 const menuAll = async (id) => {
     const sqlquery = {
-        text: `SELECT c.id as category_id, c.name as category_name, p.id , p.name, p.normal_price, p.discount_price, p.description, p.image  
+        text: `SELECT c.id as category_id, c.name as category_name, p.id , p.name, p.normal_price, p.discount_price, p.description, p.image, m.name as menu_name  
         FROM menus as m 
         JOIN categories as c ON c.menu_id = m.id
         INNER JOIN products as p ON c.id = p.category_id
         WHERE m.id = $1
         AND p.visible = true
-        GROUP BY c.id, p.id
+        GROUP BY c.id, p.id, m.name
         ORDER BY c.name ASC;`,
         values: [id],
     };
