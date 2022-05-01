@@ -5,9 +5,15 @@ const jwt = require("jsonwebtoken");
 const login = async (req, res) => {
     try {
         const { email, password } = req.body;
+
         const response = await loginDB(email);
 
-        const { datas } = response;
+        const { datas } = await response;
+
+        if (datas.length == 0) {
+            throw new Error("No existe el email");
+        }
+
         const [user] = datas;
         const comparePassword = await bcrypt.compare(password, user.password);
 

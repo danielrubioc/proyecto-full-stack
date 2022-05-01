@@ -1,7 +1,10 @@
 const express = require("express");
 const expressFileUpload = require("express-fileupload");
 const router = express.Router();
-const { validateRegister } = require("../middlewares/auth.validations");
+const {
+    validateRegister,
+    validateLogin,
+} = require("../middlewares/auth.express.validations");
 const { requireAuth } = require("../middlewares/requireAuth");
 const { existsErrors } = require("../middlewares/errors.validations");
 const { menuByUser } = require("../middlewares/menuByUser");
@@ -41,7 +44,7 @@ router.use(
 );
 
 /*AUTH ROUTES*/
-router.post("/login", login);
+router.post("/login", [validateLogin, existsErrors], login);
 router.post("/register", [validateRegister, existsErrors], register);
 
 /*USERS ROUTES*/
